@@ -1,57 +1,46 @@
-# Installation Steps for Laravel Project
+# Langkah Instalasi untuk Proyek Laravel
 
-Follow these steps to set up your Laravel project:
+Ikuti langkah-langkah berikut untuk mengatur proyek Laravel Anda:
 
-1. **Clone the Repository**
+1. **Kloning Repository**
 
     ```bash
-    git clone <repository-url>
-    cd <repository-directory>
+    git clone https://github.com/isepirmansyah/Sistem-Informasi-Geografis---Sulawesi.git
+    cd Sistem-Informasi-Geografis---Sulawesi
     ```
 
-2. **Install Composer Dependencies**
+2. **Instal Dependensi Composer**
 
     ```bash
     composer install
     ```
 
-3. **Copy .env File**
+3. **Salin File .env**
 
     ```bash
     cp .env.example .env
     ```
 
-4. **Generate Application Key**
+4. **Generate Kunci Aplikasi**
 
     ```bash
     php artisan key:generate
     ```
 
-5. **Configure Environment Variables**
+5. **Konfigurasi Variabel Lingkungan**
 
-    Open the `.env` file and update the necessary environment variables, such as database credentials.
+    Buka file `.env` dan perbarui variabel lingkungan yang diperlukan, seperti kredensial database.
 
-6. **Run Migrations**
+6. **Jalankan Migrasi**
 
     ```bash
     php artisan migrate
     ```
 
-7. **Install NPM Dependencies**
+7. **Jalankan Aplikasi**
 
-    ```bash
-    npm install
-    ```
-
-8. **Compile Assets**
-
-    ```bash
-    npm run dev
-    ```
-
-9. **Serve the Application**
     ```bash
     php artisan serve
     ```
 
-Your Laravel project should now be up and running. Open your browser and navigate to `http://localhost:8000` to see the application.
+Proyek Laravel Anda sekarang seharusnya sudah berjalan. Buka browser Anda dan navigasikan ke `http://localhost:8000` untuk melihat aplikasi.
