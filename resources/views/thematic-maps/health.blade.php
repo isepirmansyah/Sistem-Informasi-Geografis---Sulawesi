@@ -4,9 +4,9 @@
     <div class="container mx-auto px-4 py-8">
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
             <!-- Header -->
-            <div class="p-6 bg-gradient-to-r from-blue-500 to-blue-600">
-                <h1 class="text-2xl font-bold text-white">Peta Tematik Populasi Sulawesi</h1>
-                <p class="text-blue-100 mt-2">Visualisasi jumlah penduduk di provinsi-provinsi Sulawesi</p>
+            <div class="p-6 bg-gradient-to-r from-pink-500 to-pink-600">
+                <h1 class="text-2xl font-bold text-white">Peta Tematik Fasilitas Kesehatan Sulawesi</h1>
+                <p class="text-pink-100 mt-2">Visualisasi jumlah fasilitas kesehatan di provinsi-provinsi Sulawesi</p>
             </div>
 
             <!-- Map Container -->
@@ -63,15 +63,15 @@
         }
 
         function getColor(d) {
-            const grades = [1000000, 1500000, 2800000, 3500000, 10000000];
-            const colors = ['#90caf9', '#64b5f6', '#42a5f5', '#2196f3', '#1e88e5'];
+            const grades = [100, 200, 300, 400, 500];
+            const colors = ['#f48fb1', '#f06292', '#ec407a', '#e91e63', '#d81b60'];
 
             for (let i = 0; i < grades.length; i++) {
                 if (d <= grades[i]) {
                     return colors[i];
                 }
             }
-            return '#1565c0';
+            return '#ad1457';
         }
 
         function style(feature) {
@@ -79,14 +79,14 @@
                 return feature.properties.name && sanitizeName(p.name) === sanitizeName(feature.properties.name);
             });
 
-            let population = 0;
-            if (province && province.thematic_data && province.thematic_data.length > 0 && province.thematic_data[0] &&
-                province.thematic_data[0].population) {
-                population = parseFloat(province.thematic_data[0].population);
+            let totalFacilities = 0;
+            if (province && province.thematic_data && province.thematic_data.length > 0 && province.thematic_data[0]) {
+                const data = province.thematic_data[0];
+                totalFacilities = (parseFloat(data.hospitals) || 0) + (parseFloat(data.health_centers) || 0);
             }
 
             return {
-                fillColor: getColor(population),
+                fillColor: getColor(totalFacilities),
                 weight: 2,
                 opacity: 1,
                 color: 'white',
@@ -146,15 +146,19 @@
                 return props.name && sanitizeName(p.name) === sanitizeName(props.name);
             });
 
-            let population = 0;
-            if (province && province.thematic_data && province.thematic_data.length > 0 && province.thematic_data[0] &&
-                province.thematic_data[0].population) {
-                population = parseFloat(province.thematic_data[0].population);
+            let hospitals = 0;
+            let healthCenters = 0;
+            if (province && province.thematic_data && province.thematic_data.length > 0 && province.thematic_data[0]) {
+                const data = province.thematic_data[0];
+                hospitals = parseFloat(data.hospitals) || 0;
+                healthCenters = parseFloat(data.health_centers) || 0;
             }
 
             this._div.innerHTML = '<h4>Informasi Provinsi</h4>' +
                 '<b>' + (props.name || 'Unknown') + '</b><br />' +
-                population.toLocaleString('id-ID') + ' jiwa';
+                'Rumah Sakit: ' + hospitals.toLocaleString('id-ID') + '<br />' +
+                'Puskesmas: ' + healthCenters.toLocaleString('id-ID') + '<br />' +
+                'Total: ' + (hospitals + healthCenters).toLocaleString('id-ID');
         };
 
         info.addTo(map);
@@ -165,16 +169,16 @@
 
         legend.onAdd = function(map) {
             var div = L.DomUtil.create('div', 'info legend');
-            const grades = [1000000, 1500000, 2800000, 3500000, 10000000];
-            const colors = ['#90caf9', '#64b5f6', '#42a5f5', '#2196f3', '#1e88e5'];
-            div.innerHTML = '<h4>Jumlah Penduduk (Jiwa)</h4>';
+            const grades = [100, 200, 300, 400, 500];
+            const colors = ['#f48fb1', '#f06292', '#ec407a', '#e91e63', '#d81b60'];
+            div.innerHTML = '<h4>Jumlah Fasilitas Kesehatan</h4>';
             for (let i = 0; i < grades.length; i++) {
                 div.innerHTML +=
                     `<i style="background:${colors[i]}"></i>` +
                     (grades[i - 1] ? grades[i - 1].toLocaleString('id-ID') + ' - ' : '') +
                     grades[i].toLocaleString('id-ID') + '<br>';
             }
-            div.innerHTML += `<i style="background:#1565c0"></i>` + grades[grades.length - 1].toLocaleString('id-ID') +
+            div.innerHTML += `<i style="background:#ad1457"></i>` + grades[grades.length - 1].toLocaleString('id-ID') +
                 '+';
             return div;
         };
@@ -218,4 +222,4 @@
                 });
         });
     </script>
-@endpush
+@endpush 

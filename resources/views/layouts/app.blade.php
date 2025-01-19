@@ -20,8 +20,12 @@
             height: 80vh;
             min-height: 600px;
             position: relative;
+        }
+
+        #map {
             z-index: 1;
         }
+
 
         .hero-gradient {
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7));
@@ -165,24 +169,32 @@
                         <i class="fas fa-chevron-down ml-1 text-sm"></i>
                     </button>
                     <div class="dropdown-menu absolute hidden bg-white mt-2 py-2 w-56 rounded-lg shadow-xl">
-                        <a href="{{ route('thematic-maps.population') }}"
-                            class="block px-4 py-2 hover:bg-green-50 hover:text-green-500">
-                            <i class="fas fa-chart-pie mr-2"></i>Peta Populasi
+                        <a href="{{ route('thematic-maps.area') }}" class="block px-4 py-2 hover:bg-green-50 hover:text-green-500">
+                            <i class="fas fa-chart-area mr-2"></i>Peta Luas Wilayah
                         </a>
-                        <a href="/peta/demografi" class="block px-4 py-2 hover:bg-green-50 hover:text-green-500">
-                            <i class="fas fa-users mr-2"></i>Peta Demografi
+                        <a href="{{ route('thematic-maps.population') }}" class="block px-4 py-2 hover:bg-blue-50 hover:text-blue-500">
+                            <i class="fas fa-users mr-2"></i>Peta Populasi
                         </a>
-                        <a href="/peta/pendidikan" class="block px-4 py-2 hover:bg-green-50 hover:text-green-500">
+                        <a href="{{ route('thematic-maps.density') }}" class="block px-4 py-2 hover:bg-purple-50 hover:text-purple-500">
+                            <i class="fas fa-chart-pie mr-2"></i>Peta Kepadatan Penduduk
+                        </a>
+                        <a href="{{ route('thematic-maps.unemployment') }}" class="block px-4 py-2 hover:bg-red-50 hover:text-red-500">
+                            <i class="fas fa-user-minus mr-2"></i>Peta Pengangguran
+                        </a>
+                        <a href="{{ route('thematic-maps.hdi') }}" class="block px-4 py-2 hover:bg-amber-50 hover:text-amber-500">
+                            <i class="fas fa-chart-line mr-2"></i>Peta IPM
+                        </a>
+                        <a href="{{ route('thematic-maps.income') }}" class="block px-4 py-2 hover:bg-teal-50 hover:text-teal-500">
+                            <i class="fas fa-money-bill-wave mr-2"></i>Peta Pendapatan
+                        </a>
+                        <a href="{{ route('thematic-maps.poverty') }}" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-500">
+                            <i class="fas fa-hand-holding-usd mr-2"></i>Peta Kemiskinan
+                        </a>
+                        <a href="{{ route('thematic-maps.education') }}" class="block px-4 py-2 hover:bg-orange-50 hover:text-orange-500">
                             <i class="fas fa-school mr-2"></i>Peta Pendidikan
                         </a>
-                        <a href="/peta/kesehatan" class="block px-4 py-2 hover:bg-green-50 hover:text-green-500">
+                        <a href="{{ route('thematic-maps.health') }}" class="block px-4 py-2 hover:bg-pink-50 hover:text-pink-500">
                             <i class="fas fa-hospital mr-2"></i>Peta Kesehatan
-                        </a>
-                        <a href="/peta/ekonomi" class="block px-4 py-2 hover:bg-green-50 hover:text-green-500">
-                            <i class="fas fa-chart-line mr-2"></i>Peta Ekonomi
-                        </a>
-                        <a href="/peta/infrastruktur" class="block px-4 py-2 hover:bg-green-50 hover:text-green-500">
-                            <i class="fas fa-road mr-2"></i>Peta Infrastruktur
                         </a>
                     </div>
                 </div>

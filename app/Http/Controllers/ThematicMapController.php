@@ -12,6 +12,15 @@ class ThematicMapController extends Controller
         return view('thematic-maps.index');
     }
 
+    public function area()
+    {
+        $provinces = Province::with(['thematicData' => function ($query) {
+            $query->where('year', 2024)->latest();
+        }])->get();
+
+        return view('thematic-maps.area', compact('provinces'));
+    }
+
     public function population()
     {
         $provinces = Province::with(['thematicData' => function ($query) {
@@ -27,7 +36,7 @@ class ThematicMapController extends Controller
             $query->where('year', 2024)->latest();
         }])->get();
 
-        return view('thematic-maps.density', compact('provinces'));
+        return view('thematic-maps.population-density', compact('provinces'));
     }
 
     public function unemployment()
@@ -94,7 +103,8 @@ class ThematicMapController extends Controller
         foreach ($provinces as $province) {
             $thematicData = $province->thematicData->first();
             if ($thematicData) {
-                $value = match($type) {
+                $value = match ($type) {
+                    'area' => $thematicData->area,
                     'population' => $thematicData->population,
                     'density' => $thematicData->population_density,
                     'unemployment' => $thematicData->unemployment_rate,
@@ -118,4 +128,4 @@ class ThematicMapController extends Controller
 
         return response()->json($data);
     }
-} 
+}
