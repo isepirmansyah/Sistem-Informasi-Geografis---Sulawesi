@@ -62,8 +62,8 @@
                     <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
                         <i class="fas fa-map-marked-alt text-2xl text-green-600"></i>
                     </div>
-                    <h3 class="text-2xl font-bold mb-4">Peta Interaktif 3D</h3>
-                    <p class="text-gray-600 mb-4">Visualisasi data geografis dengan tampilan 3D yang interaktif dan
+                    <h3 class="text-2xl font-bold mb-4">Peta Interaktif 2D</h3>
+                    <p class="text-gray-600 mb-4">Visualisasi data geografis dengan tampilan 2D yang interaktif dan
                         detail.</p>
                     <ul class="text-gray-600 space-y-2">
                         <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Rotasi 360
@@ -115,7 +115,7 @@
         </div>
     </section>
 
-    <!-- Provinsi Quick Access yang Ditingkatkan -->
+    <!-- Provinsi Quick Access -->
     <section class="py-20 bg-gray-50">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16" data-aos="fade-up">
@@ -123,49 +123,14 @@
                 <p class="text-xl text-gray-600">Jelajahi data spesifik untuk setiap provinsi</p>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-                @php
-                    $provinceData = [
-                        'Sulawesi Utara' => [
-                            'image' => 'sulut.jpg',
-                            'capital' => 'Manado',
-                            'population' => '2.6 Juta',
-                        ],
-                        'Sulawesi Tengah' => [
-                            'image' => 'sulteng.jpg',
-                            'capital' => 'Palu',
-                            'population' => '3.1 Juta',
-                        ],
-                        'Sulawesi Selatan' => [
-                            'image' => 'sulsel.jpg',
-                            'capital' => 'Makassar',
-                            'population' => '9.1 Juta',
-                        ],
-                        'Sulawesi Tenggara' => [
-                            'image' => 'sultra.jpg',
-                            'capital' => 'Kendari',
-                            'population' => '2.7 Juta',
-                        ],
-                        'Gorontalo' => [
-                            'image' => 'gorontalo.jpg',
-                            'capital' => 'Gorontalo',
-                            'population' => '1.2 Juta',
-                        ],
-                        'Sulawesi Barat' => [
-                            'image' => 'sulbar.jpg',
-                            'capital' => 'Mamuju',
-                            'population' => '1.4 Juta',
-                        ],
-                    ];
-                @endphp
-
-                @foreach ($provinceData as $name => $data)
+                @foreach ($formattedProvinces as $name => $data)
                     <div class="province-card p-6 rounded-xl" data-aos="fade-up" data-aos-delay="100">
                         <div class="province-image-container mb-6">
                             <img src="{{ asset('images/provinces/' . $data['image']) }}" alt="{{ $name }}"
                                 class="province-image"
                                 onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fas fa-map-marked-alt text-4xl text-green-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2\'></i>'">
                         </div>
-                        <h3 class="font-bold text-lg mb-2">{{ $name }}</h3>
+                        <h3 class="font-bold text-lg mb-2">{{ ucwords(strtolower($name)) }}</h3>
                         <p class="text-sm text-gray-500 mb-2">{{ $data['capital'] }}</p>
                         <p class="text-xs text-gray-400">{{ $data['population'] }} penduduk</p>
                         <button onclick="showProvinceDetails('{{ $name }}')"
@@ -179,7 +144,7 @@
         </div>
     </section>
 
-    <!-- Statistics Section yang Dilengkapi -->
+    <!-- Statistik Section -->
     <section id="statistics" class="py-20 bg-gray-50">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16" data-aos="fade-up">
@@ -192,21 +157,21 @@
                     <div class="inline-flex p-4 rounded-full bg-green-100 mb-6">
                         <i class="fas fa-users text-3xl text-green-500"></i>
                     </div>
-                    <h3 class="text-3xl font-bold mb-2">19.5 Juta</h3>
+                    <h3 class="text-3xl font-bold mb-2">{{ $statistics['total_population'] }}</h3>
                     <p class="text-gray-600">Total Penduduk</p>
                     <div class="mt-4">
                         <span class="text-green-500 text-sm">
-                            <i class="fas fa-arrow-up"></i> 2.3% dari tahun lalu
+                            <i class="fas fa-arrow-up"></i> {{ $statistics['population_growth'] }} dari tahun lalu
                         </span>
                     </div>
                     <div class="mt-4 pt-4 border-t">
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-500">Pria</span>
-                            <span class="font-semibold">52%</span>
+                            <span class="text-gray-500">Penduduk Miskin</span>
+                            <span class="font-semibold">{{ $statistics['total_poor_population'] }}</span>
                         </div>
                         <div class="flex justify-between text-sm mt-2">
-                            <span class="text-gray-500">Wanita</span>
-                            <span class="font-semibold">48%</span>
+                            <span class="text-gray-500">Pengangguran</span>
+                            <span class="font-semibold">{{ $statistics['avg_unemployment_rate'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -216,21 +181,21 @@
                     <div class="inline-flex p-4 rounded-full bg-blue-100 mb-6">
                         <i class="fas fa-map-marked text-3xl text-blue-500"></i>
                     </div>
-                    <h3 class="text-3xl font-bold mb-2">174,600 km²</h3>
+                    <h3 class="text-3xl font-bold mb-2">{{ $statistics['total_area'] }}</h3>
                     <p class="text-gray-600">Luas Wilayah</p>
                     <div class="mt-4">
                         <span class="text-blue-500 text-sm">
-                            6 Provinsi
+                            {{ $statistics['province_count'] }} Provinsi
                         </span>
                     </div>
                     <div class="mt-4 pt-4 border-t">
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-500">Daratan</span>
-                            <span class="font-semibold">85%</span>
+                            <span class="font-semibold">{{ $statistics['land_percentage'] }}</span>
                         </div>
                         <div class="flex justify-between text-sm mt-2">
                             <span class="text-gray-500">Perairan</span>
-                            <span class="font-semibold">15%</span>
+                            <span class="font-semibold">{{ $statistics['water_percentage'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -240,45 +205,45 @@
                     <div class="inline-flex p-4 rounded-full bg-yellow-100 mb-6">
                         <i class="fas fa-chart-line text-3xl text-yellow-500"></i>
                     </div>
-                    <h3 class="text-3xl font-bold mb-2">Rp 892 T</h3>
-                    <p class="text-gray-600">PDRB</p>
+                    <h3 class="text-3xl font-bold mb-2">{{ $statistics['avg_per_capita_income'] }}</h3>
+                    <p class="text-gray-600">Rata-rata Pendapatan per Kapita</p>
                     <div class="mt-4">
                         <span class="text-yellow-500 text-sm">
-                            <i class="fas fa-arrow-up"></i> 5.2% pertumbuhan
+                            <i class="fas fa-arrow-up"></i> IPM: {{ $statistics['avg_hdi'] }}
                         </span>
                     </div>
                     <div class="mt-4 pt-4 border-t">
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-500">Industri</span>
-                            <span class="font-semibold">45%</span>
+                            <span class="text-gray-500">Pengangguran</span>
+                            <span class="font-semibold">{{ $statistics['avg_unemployment_rate'] }}</span>
                         </div>
                         <div class="flex justify-between text-sm mt-2">
-                            <span class="text-gray-500">Pertanian</span>
-                            <span class="font-semibold">35%</span>
+                            <span class="text-gray-500">Penduduk Miskin</span>
+                            <span class="font-semibold">{{ $statistics['total_poor_population'] }}</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Statistik Pendidikan -->
+                <!-- Statistik Fasilitas -->
                 <div class="stat-card bg-white rounded-2xl p-8 text-center" data-aos="fade-up" data-aos-delay="400">
                     <div class="inline-flex p-4 rounded-full bg-purple-100 mb-6">
-                        <i class="fas fa-graduation-cap text-3xl text-purple-500"></i>
+                        <i class="fas fa-hospital text-3xl text-purple-500"></i>
                     </div>
-                    <h3 class="text-3xl font-bold mb-2">98.5%</h3>
-                    <p class="text-gray-600">Angka Melek Huruf</p>
+                    <h3 class="text-3xl font-bold mb-2">{{ $statistics['total_hospitals'] }}</h3>
+                    <p class="text-gray-600">Rumah Sakit</p>
                     <div class="mt-4">
                         <span class="text-purple-500 text-sm">
-                            <i class="fas fa-arrow-up"></i> 1.5% peningkatan
+                            <i class="fas fa-plus"></i> {{ $statistics['total_health_centers'] }} Puskesmas
                         </span>
                     </div>
                     <div class="mt-4 pt-4 border-t">
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-500">SD-SMP</span>
-                            <span class="font-semibold">99%</span>
+                            <span class="text-gray-500">Sekolah</span>
+                            <span class="font-semibold">{{ $statistics['total_schools'] }}</span>
                         </div>
                         <div class="flex justify-between text-sm mt-2">
-                            <span class="text-gray-500">SMA-PT</span>
-                            <span class="font-semibold">78%</span>
+                            <span class="text-gray-500">Puskesmas</span>
+                            <span class="font-semibold">{{ $statistics['total_health_centers'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -295,34 +260,83 @@
             once: true
         });
 
-
-        // Fungsi untuk menampilkan detail provinsi
         function showProvinceDetails(provinceName) {
-            // Buat modal untuk menampilkan detail
+            const provinces = @json($formattedProvinces);
+            const province = provinces[provinceName];
+
             const modalHtml = `
                 <div id="provinceModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div class="absolute inset-0 bg-black opacity-50"></div>
-                    <div class="relative bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden">
+                    <div class="relative bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-4 overflow-hidden">
                         <div class="p-6">
                             <h2 class="text-2xl font-bold mb-4">${provinceName}</h2>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <!-- Kolom 1: Gambar dan Info Dasar -->
                                 <div>
-                                    <img src="/images/provinces/${provinceName.toLowerCase().replace(/ /g, '-')}.jpg"
-                                         class="w-full h-48 object-cover rounded-lg"
-                                         alt="${provinceName}">
-                                </div>
-                                <div>
-                                    <h3 class="font-bold mb-2">Statistik</h3>
-                                    <ul class="space-y-2">
-                                        <li class="flex justify-between">
-                                            <span class="text-gray-600">Populasi:</span>
-                                            <span class="font-semibold">${getProvinceData(provinceName).population}</span>
-                                        </li>
-                                        <li class="flex justify-between">
+                                    <img src="/images/provinces/${province.image}"
+                                         class="w-full h-auto object-cover rounded-lg mb-4"
+                                         alt="${provinceName}"
+                                         onerror="this.onerror=null; this.src='/images/default-province.jpg'">
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
                                             <span class="text-gray-600">Ibu Kota:</span>
-                                            <span class="font-semibold">${getProvinceData(provinceName).capital}</span>
-                                        </li>
-                                    </ul>
+                                            <span class="font-semibold">${province.capital}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Kolom 2: Statistik Demografi -->
+                                <div>
+                                    <h3 class="font-bold mb-3 text-lg">Demografi</h3>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Populasi:</span>
+                                            <span class="font-semibold">${province.population}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Luas Wilayah:</span>
+                                            <span class="font-semibold">${province.area}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Kepadatan:</span>
+                                            <span class="font-semibold">${province.population_density}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Penduduk Miskin:</span>
+                                            <span class="font-semibold">${province.poor_population}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Pengangguran:</span>
+                                            <span class="font-semibold">${province.unemployment_rate}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Kolom 3: Statistik Pembangunan -->
+                                <div>
+                                    <h3 class="font-bold mb-3 text-lg">Pembangunan</h3>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">IPM:</span>
+                                            <span class="font-semibold">${province.human_development_index}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Pendapatan per Kapita:</span>
+                                            <span class="font-semibold">${province.per_capita_income}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Sekolah:</span>
+                                            <span class="font-semibold">${province.schools}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Rumah Sakit:</span>
+                                            <span class="font-semibold">${province.hospitals}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Puskesmas:</span>
+                                            <span class="font-semibold">${province.health_centers}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="mt-6 flex justify-end">
@@ -340,36 +354,6 @@
 
         function closeProvinceModal() {
             document.getElementById('provinceModal').remove();
-        }
-
-        function getProvinceData(provinceName) {
-            const provinceData = {
-                'Sulawesi Utara': {
-                    population: '2.6 Juta',
-                    capital: 'Manado'
-                },
-                'Sulawesi Tengah': {
-                    population: '3.1 Juta',
-                    capital: 'Palu'
-                },
-                'Sulawesi Selatan': {
-                    population: '9.1 Juta',
-                    capital: 'Makassar'
-                },
-                'Sulawesi Tenggara': {
-                    population: '2.7 Juta',
-                    capital: 'Kendari'
-                },
-                'Gorontalo': {
-                    population: '1.2 Juta',
-                    capital: 'Gorontalo'
-                },
-                'Sulawesi Barat': {
-                    population: '1.4 Juta',
-                    capital: 'Mamuju'
-                }
-            };
-            return provinceData[provinceName];
         }
     </script>
 @endpush

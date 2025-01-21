@@ -12,6 +12,24 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Custom Styles -->
     <style>
+        ::-webkit-scrollbar {
+            width: 15px;
+            border-radius: 25px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 30px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #bbb;
+        }
+
         .dropdown:hover .dropdown-menu {
             display: block;
         }
@@ -133,23 +151,172 @@
         .leaflet-container {
             font: inherit;
         }
+
+        .text-blk {
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+            line-height: 25px;
+        }
+
+        .responsive-cell-block {
+            min-height: 75px;
+        }
+
+        .responsive-container-block {
+            min-height: 75px;
+            height: fit-content;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 0px;
+            margin-right: auto;
+            margin-bottom: 0px;
+            margin-left: auto;
+            justify-content: space-evenly;
+        }
+
+        .outer-container {
+            padding-top: 10px;
+            padding-right: 50px;
+            padding-bottom: 10px;
+            padding-left: 50px;
+            background-color: rgb(244, 252, 255);
+        }
+
+        .inner-container {
+            max-width: 1320px;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            margin-right: auto;
+            margin-bottom: 50px;
+            margin-left: auto;
+        }
+
+        .section-head-text {
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 5px;
+            margin-left: 0px;
+            font-size: 35px;
+            font-weight: 700;
+            line-height: 48px;
+            color: rgb(0, 135, 177);
+            margin: 0 0 10px 0;
+        }
+
+        .section-subhead-text {
+            font-size: 25px;
+            color: rgb(153, 153, 153);
+            line-height: 35px;
+            max-width: 470px;
+            text-align: center;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 60px;
+            margin-left: 0px;
+        }
+
+        .img-wrapper {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .team-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .social-media-links {
+            width: 125px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .name {
+            font-size: 22px;
+            font-weight: 700;
+            color: rgb(102, 102, 102);
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 5px;
+            margin-left: 0px;
+            text-align: center;
+        }
+
+        .position {
+            font-size: 20px;
+            font-weight: 700;
+            color: rgb(0, 135, 177);
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 50px;
+            margin-left: 0px;
+        }
+
+        .role-badge {
+            font-size: 15px;
+            color: rgb(102, 102, 102);
+            margin-left: 8px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .team-img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .team-card-container {
+            width: 280px;
+            margin: 0 0 40px 0;
+        }
+
+        .social-media-links a {
+            color: #666;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .social-media-links a:hover {
+            transform: translateY(-3px);
+        }
+
+        .social-media-links a:hover .fa-twitter {
+            color: #1DA1F2;
+        }
+
+        .social-media-links a:hover .fa-facebook {
+            color: #4267B2;
+        }
+
+        .social-media-links a:hover .fa-instagram {
+            color: #E1306C;
+        }
+
+        .social-media-links a:hover .fa-github {
+            color: #333;
+        }
+
+        @media (max-width: 500px) {
+            .outer-container {
+                padding: 10px 20px 10px 20px;
+            }
+
+            .section-head-text {
+                text-align: center;
+            }
+        }
     </style>
 </head>
 
 <body class="bg-gray-50 text-gray-800 font-sans">
-    <!-- Floating Action Button untuk Quick Access -->
-    <div class="fixed bottom-6 right-6 z-50">
-        <div class="flex flex-col space-y-4">
-            <button class="bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-all"
-                title="Quick Navigation">
-                <i class="fas fa-compass text-xl"></i>
-            </button>
-            <button class="bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition-all"
-                title="Download Data">
-                <i class="fas fa-download text-xl"></i>
-            </button>
-        </div>
-    </div>
 
     <!-- Navigation Menu yang Ditingkatkan -->
     <nav class="bg-white/90 backdrop-blur-md shadow-lg fixed w-full z-50 top-0">
@@ -169,31 +336,40 @@
                         <i class="fas fa-chevron-down ml-1 text-sm"></i>
                     </button>
                     <div class="dropdown-menu absolute hidden bg-white mt-2 py-2 w-56 rounded-lg shadow-xl">
-                        <a href="{{ route('thematic-maps.area') }}" class="block px-4 py-2 hover:bg-green-50 hover:text-green-500">
+                        <a href="{{ route('thematic-maps.area') }}"
+                            class="block px-4 py-2 hover:bg-green-50 hover:text-green-500">
                             <i class="fas fa-chart-area mr-2"></i>Peta Luas Wilayah
                         </a>
-                        <a href="{{ route('thematic-maps.population') }}" class="block px-4 py-2 hover:bg-blue-50 hover:text-blue-500">
+                        <a href="{{ route('thematic-maps.population') }}"
+                            class="block px-4 py-2 hover:bg-blue-50 hover:text-blue-500">
                             <i class="fas fa-users mr-2"></i>Peta Populasi
                         </a>
-                        <a href="{{ route('thematic-maps.density') }}" class="block px-4 py-2 hover:bg-purple-50 hover:text-purple-500">
-                            <i class="fas fa-chart-pie mr-2"></i>Peta Kepadatan Penduduk
+                        <a href="{{ route('thematic-maps.density') }}"
+                            class="block px-4 py-2 hover:bg-purple-50 hover:text-purple-500">
+                            <i class="fas fa-chart-pie mr-2"></i>Peta Kepadatan
                         </a>
-                        <a href="{{ route('thematic-maps.unemployment') }}" class="block px-4 py-2 hover:bg-red-50 hover:text-red-500">
+                        <a href="{{ route('thematic-maps.unemployment') }}"
+                            class="block px-4 py-2 hover:bg-red-50 hover:text-red-500">
                             <i class="fas fa-user-minus mr-2"></i>Peta Pengangguran
                         </a>
-                        <a href="{{ route('thematic-maps.hdi') }}" class="block px-4 py-2 hover:bg-amber-50 hover:text-amber-500">
+                        <a href="{{ route('thematic-maps.hdi') }}"
+                            class="block px-4 py-2 hover:bg-amber-50 hover:text-amber-500">
                             <i class="fas fa-chart-line mr-2"></i>Peta IPM
                         </a>
-                        <a href="{{ route('thematic-maps.income') }}" class="block px-4 py-2 hover:bg-teal-50 hover:text-teal-500">
+                        <a href="{{ route('thematic-maps.income') }}"
+                            class="block px-4 py-2 hover:bg-teal-50 hover:text-teal-500">
                             <i class="fas fa-money-bill-wave mr-2"></i>Peta Pendapatan
                         </a>
-                        <a href="{{ route('thematic-maps.poverty') }}" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-500">
+                        <a href="{{ route('thematic-maps.poverty') }}"
+                            class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-500">
                             <i class="fas fa-hand-holding-usd mr-2"></i>Peta Kemiskinan
                         </a>
-                        <a href="{{ route('thematic-maps.education') }}" class="block px-4 py-2 hover:bg-orange-50 hover:text-orange-500">
+                        <a href="{{ route('thematic-maps.education') }}"
+                            class="block px-4 py-2 hover:bg-orange-50 hover:text-orange-500">
                             <i class="fas fa-school mr-2"></i>Peta Pendidikan
                         </a>
-                        <a href="{{ route('thematic-maps.health') }}" class="block px-4 py-2 hover:bg-pink-50 hover:text-pink-500">
+                        <a href="{{ route('thematic-maps.health') }}"
+                            class="block px-4 py-2 hover:bg-pink-50 hover:text-pink-500">
                             <i class="fas fa-hospital mr-2"></i>Peta Kesehatan
                         </a>
                     </div>
@@ -217,6 +393,7 @@
 
                 <a href="#statistics" class="hover:text-green-500 transition duration-300">Statistik</a>
                 <a href="#contact" class="hover:text-green-500 transition duration-300">Kontak</a>
+                <a href="{{ route('team') }}" class="block hover:text-green-500">About</a>
             </div>
 
             <a href="/admin/login"
@@ -302,6 +479,8 @@
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p class="mb-2">Dibuat dengan <i class="fas fa-heart text-red-500"></i> dan <i
+                        class="fas fa-mug-hot text-brown-500"></i> oleh IsepWebTim</p>
                 <p>&copy; 2024 SIG Sulawesi. Hak Cipta Dilindungi.</p>
             </div>
         </div>

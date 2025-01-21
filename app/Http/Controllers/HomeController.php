@@ -3,143 +3,107 @@
 namespace App\Http\Controllers;
 
 use App\Models\Province;
-use App\Models\ThematicData;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $provinces = Province::with(['thematicData' => function($query) {
+        // Mengambil data provinsi dengan thematic data
+        $provinces = Province::with(['thematicData' => function ($query) {
             $query->where('year', 2024)->latest();
         }])->get();
 
-        return view('home', compact('provinces'));
+        // Menghitung statistik agregat
+        $statistics = $this->calculateStatistics($provinces);
+
+        // Memformat data provinsi untuk ditampilkan
+        $formattedProvinces = $provinces->map(function ($province) {
+            $thematicData = $province->thematicData->first();
+            return [
+                'name' => $province->name,
+                'image' => $province->image,
+                'capital' => $this->getProvinceCapital($province->name),
+                'population' => $this->formatPopulation($thematicData->population ?? 0),
+                'latitude' => $province->latitude,
+                'longitude' => $province->longitude,
+                'area' => number_format($thematicData->area ?? 0, 0, ',', '.') . ' km²',
+                'population_density' => number_format($thematicData->population_density ?? 0, 0, ',', '.') . ' jiwa/km²',
+                'unemployment_rate' => number_format($thematicData->unemployment_rate ?? 0, 1) . '%',
+                'human_development_index' => number_format($thematicData->human_development_index ?? 0, 2),
+                'per_capita_income' => 'Rp ' . number_format($thematicData->per_capita_income ?? 0, 0, ',', '.'),
+                'poor_population' => number_format($thematicData->poor_population ?? 0),
+                'schools' => number_format($thematicData->schools ?? 0, 0, ',', '.'),
+                'hospitals' => number_format($thematicData->hospitals ?? 0, 0, ',', '.'),
+                'health_centers' => number_format($thematicData->health_centers ?? 0, 0, ',', '.')
+            ];
+        })->keyBy('name');
+
+        return view('home', compact('formattedProvinces', 'statistics'));
     }
 
-    private function getProvinceData()
+    private function calculateStatistics($provinces)
     {
+        $totalPopulation = 0;
+        $totalArea = 0;
+        $totalSchools = 0;
+        $totalHospitals = 0;
+        $totalHealthCenters = 0;
+        $totalPoorPopulation = 0;
+        $totalPerCapitaIncome = 0;
+        $avgUnemploymentRate = 0;
+        $avgHDI = 0;
+        $validProvinces = 0;
+
+        foreach ($provinces as $province) {
+            $thematicData = $province->thematicData->first();
+            if ($thematicData) {
+                $totalPopulation += $thematicData->population ?? 0;
+                $totalArea += $thematicData->area ?? 0;
+                $totalSchools += $thematicData->schools ?? 0;
+                $totalHospitals += $thematicData->hospitals ?? 0;
+                $totalHealthCenters += $thematicData->health_centers ?? 0;
+                $totalPoorPopulation += $thematicData->poor_population ?? 0;
+                $totalPerCapitaIncome += $thematicData->per_capita_income ?? 0;
+                $avgUnemploymentRate += $thematicData->unemployment_rate ?? 0;
+                $avgHDI += $thematicData->human_development_index ?? 0;
+                $validProvinces++;
+            }
+        }
+
         return [
-            'Sulawesi Utara' => [
-                'image' => 'sulut.jpg',
-                'capital' => 'Manado',
-                'population' => '2.6 Juta'
-            ],
-            'Sulawesi Tengah' => [
-                'image' => 'sulteng.jpg',
-                'capital' => 'Palu',
-                'population' => '3.1 Juta'
-            ],
-            'Sulawesi Selatan' => [
-                'image' => 'sulsel.jpg',
-                'capital' => 'Makassar',
-                'population' => '9.1 Juta'
-            ],
-            'Sulawesi Tenggara' => [
-                'image' => 'sultra.jpg',
-                'capital' => 'Kendari',
-                'population' => '2.7 Juta'
-            ],
-            'Gorontalo' => [
-                'image' => 'gorontalo.jpg',
-                'capital' => 'Gorontalo',
-                'population' => '1.2 Juta'
-            ],
-            'Sulawesi Barat' => [
-                'image' => 'sulbar.jpg',
-                'capital' => 'Mamuju',
-                'population' => '1.4 Juta'
-            ]
+            'total_population' => $this->formatPopulation($totalPopulation),
+            'total_area' => number_format($totalArea, 0, ',', '.') . ' km²',
+            'population_growth' => '2.3%',
+            'total_schools' => number_format($totalSchools, 0, ',', '.'),
+            'total_hospitals' => number_format($totalHospitals, 0, ',', '.'),
+            'total_health_centers' => number_format($totalHealthCenters, 0, ',', '.'),
+            'avg_unemployment_rate' => number_format($avgUnemploymentRate / ($validProvinces ?: 1), 1) . '%',
+            'avg_hdi' => number_format($avgHDI / ($validProvinces ?: 1), 2),
+            'total_poor_population' => $totalPoorPopulation,
+            'avg_per_capita_income' => 'Rp ' . number_format($totalPerCapitaIncome / ($validProvinces ?: 1), 0, ',', '.'),
+            'province_count' => $validProvinces,
+            'land_percentage' => '85%',
+            'water_percentage' => '15%'
         ];
     }
 
-    private function getDefaultProvinces()
+    private function getProvinceCapital($provinceName)
     {
-        return [
-            [
-                'id' => 1,
-                'name' => 'Sulawesi Utara',
-                'latitude' => 0.6274,
-                'longitude' => 123.9750,
-                'thematic_data' => [[
-                    'population' => 2615126,
-                    'area' => 13892,
-                    'year' => 2024,
-                    'schools' => 2156,
-                    'hospitals' => 45,
-                    'health_centers' => 233
-                ]]
-            ],
-            [
-                'id' => 2,
-                'name' => 'Sulawesi Tengah',
-                'latitude' => -1.4300,
-                'longitude' => 121.4456,
-                'thematic_data' => [[
-                    'population' => 3107707,
-                    'area' => 61841,
-                    'year' => 2024,
-                    'schools' => 2890,
-                    'hospitals' => 38,
-                    'health_centers' => 198
-                ]]
-            ],
-            [
-                'id' => 3,
-                'name' => 'Sulawesi Selatan',
-                'latitude' => -3.6687,
-                'longitude' => 119.9740,
-                'thematic_data' => [[
-                    'population' => 9073509,
-                    'area' => 46717,
-                    'year' => 2024,
-                    'schools' => 6789,
-                    'hospitals' => 89,
-                    'health_centers' => 445
-                ]]
-            ],
-            [
-                'id' => 4,
-                'name' => 'Sulawesi Tenggara',
-                'latitude' => -4.1449,
-                'longitude' => 122.1746,
-                'thematic_data' => [[
-                    'population' => 2624875,
-                    'area' => 38067,
-                    'year' => 2024,
-                    'schools' => 2345,
-                    'hospitals' => 34,
-                    'health_centers' => 189
-                ]]
-            ],
-            [
-                'id' => 5,
-                'name' => 'Gorontalo',
-                'latitude' => 0.5435,
-                'longitude' => 123.0568,
-                'thematic_data' => [[
-                    'population' => 1171681,
-                    'area' => 11257,
-                    'year' => 2024,
-                    'schools' => 987,
-                    'hospitals' => 15,
-                    'health_centers' => 98
-                ]]
-            ],
-            [
-                'id' => 6,
-                'name' => 'Sulawesi Barat',
-                'latitude' => -2.8441,
-                'longitude' => 119.2321,
-                'thematic_data' => [[
-                    'population' => 1419229,
-                    'area' => 16787,
-                    'year' => 2024,
-                    'schools' => 1234,
-                    'hospitals' => 21,
-                    'health_centers' => 156
-                ]]
-            ]
+        $capitals = [
+            'SULAWESI UTARA' => 'Manado',
+            'SULAWESI TENGAH' => 'Palu',
+            'SULAWESI SELATAN' => 'Makassar',
+            'SULAWESI TENGGARA' => 'Kendari',
+            'GORONTALO' => 'Gorontalo',
+            'SULAWESI BARAT' => 'Mamuju'
         ];
+
+        return $capitals[$provinceName] ?? '';
     }
-} 
+
+    private function formatPopulation($population)
+    {
+        return number_format($population / 1000000, 1) . ' Juta';
+    }
+}

@@ -31,3 +31,7 @@ Route::get('/kemiskinan', [ThematicMapController::class, 'poverty'])->name('them
 Route::get('/pendidikan', [ThematicMapController::class, 'education'])->name('thematic-maps.education');
 Route::get('/kesehatan', [ThematicMapController::class, 'health'])->name('thematic-maps.health');
 Route::get('/data/{type}', [ThematicMapController::class, 'getProvinceData'])->name('thematic-maps.data');
+
+Route::get('/kelompok', function () {
+    return view('team');
+})->name('team');

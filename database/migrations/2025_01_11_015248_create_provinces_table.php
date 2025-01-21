@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('alt_name');
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
+            $table->string('image');
             $table->timestamps();
         });
 
