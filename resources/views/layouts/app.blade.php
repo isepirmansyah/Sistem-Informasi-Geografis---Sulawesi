@@ -407,29 +407,70 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div id="menu-mobile" class="lg:hidden hidden bg-white shadow-lg absolute w-full">
+        <div id="mobile-menu" class="lg:hidden hidden bg-white shadow-lg absolute w-full">
             <div class="px-4 py-3 space-y-3">
                 <a href="/" class="block hover:text-green-500">Beranda</a>
                 <a href="#about" class="block hover:text-green-500">Tentang</a>
+                
+                <!-- Dropdown Peta Tematik -->
                 <div class="relative">
-                    <button class="w-full text-left hover:text-green-500 flex justify-between items-center"
-                        onclick="toggleMobileDropdown()">
+                    <button class="w-full text-left hover:text-green-500 flex justify-between items-center mobile-dropdown-toggle">
                         Peta Tematik
                         <i class="fas fa-chevron-down"></i>
                     </button>
-                    <div id="mobile-dropdown" class="hidden bg-gray-50 mt-2 py-2 px-4 rounded-lg">
-                        <a href="/peta/demografi" class="block py-2 hover:text-green-500">Peta Demografi</a>
-                        <a href="/peta/pendidikan" class="block py-2 hover:text-green-500">Peta Pendidikan</a>
-                        <a href="/peta/kesehatan" class="block py-2 hover:text-green-500">Peta Kesehatan</a>
-                        <a href="/peta/ekonomi" class="block py-2 hover:text-green-500">Peta Ekonomi</a>
-                        <a href="/peta/infrastruktur" class="block py-2 hover:text-green-500">Peta Infrastruktur</a>
+                    <div class="mobile-dropdown-menu hidden bg-gray-50 mt-2 py-2 px-4 rounded-lg">
+                        <a href="{{ route('thematic-maps.area') }}" class="block py-2 hover:text-green-500">
+                            <i class="fas fa-chart-area mr-2"></i>Peta Luas Wilayah
+                        </a>
+                        <a href="{{ route('thematic-maps.population') }}" class="block py-2 hover:text-green-500">
+                            <i class="fas fa-users mr-2"></i>Peta Populasi
+                        </a>
+                        <a href="{{ route('thematic-maps.density') }}" class="block py-2 hover:text-green-500">
+                            <i class="fas fa-chart-pie mr-2"></i>Peta Kepadatan
+                        </a>
+                        <a href="{{ route('thematic-maps.unemployment') }}" class="block py-2 hover:text-green-500">
+                            <i class="fas fa-user-minus mr-2"></i>Peta Pengangguran
+                        </a>
+                        <a href="{{ route('thematic-maps.hdi') }}" class="block py-2 hover:text-green-500">
+                            <i class="fas fa-chart-line mr-2"></i>Peta IPM
+                        </a>
+                        <a href="{{ route('thematic-maps.income') }}" class="block py-2 hover:text-green-500">
+                            <i class="fas fa-money-bill-wave mr-2"></i>Peta Pendapatan
+                        </a>
+                        <a href="{{ route('thematic-maps.poverty') }}" class="block py-2 hover:text-green-500">
+                            <i class="fas fa-hand-holding-usd mr-2"></i>Peta Kemiskinan
+                        </a>
+                        <a href="{{ route('thematic-maps.education') }}" class="block py-2 hover:text-green-500">
+                            <i class="fas fa-school mr-2"></i>Peta Pendidikan
+                        </a>
+                        <a href="{{ route('thematic-maps.health') }}" class="block py-2 hover:text-green-500">
+                            <i class="fas fa-hospital mr-2"></i>Peta Kesehatan
+                        </a>
                     </div>
                 </div>
+
+                <!-- Dropdown Data Sulawesi -->
+                <div class="relative">
+                    <button class="w-full text-left hover:text-green-500 flex justify-between items-center mobile-dropdown-toggle">
+                        Data Sulawesi
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="mobile-dropdown-menu hidden bg-gray-50 mt-2 py-2 px-4 rounded-lg">
+                        <a href="{{ route('map') }}" class="block py-2 hover:text-green-500">
+                            <i class="fas fa-map-location-dot mr-2"></i>Peta Sulawesi
+                        </a>
+                        <a href="{{ route('provinces') }}" class="block py-2 hover:text-green-500">
+                            <i class="fas fa-map-signs mr-2"></i>Data Provinsi
+                        </a>
+                    </div>
+                </div>
+
                 <a href="#statistics" class="block hover:text-green-500">Statistik</a>
                 <a href="#contact" class="block hover:text-green-500">Kontak</a>
-                <button class="w-full bg-green-500 text-white py-2 rounded-full hover:bg-green-600">
+                <a href="{{ route('team') }}" class="block hover:text-green-500">About</a>
+                <a href="/admin/login" class="block w-full bg-green-500 text-white py-2 rounded-full hover:bg-green-600 text-center mt-4">
                     Login
-                </button>
+                </a>
             </div>
         </div>
     </nav>
@@ -491,6 +532,59 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://unpkg.com/three@0.132.2/build/three.min.js"></script>
     <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        // Toggle Mobile Menu
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Toggle Mobile Dropdowns
+        const mobileDropdownToggles = document.querySelectorAll('.mobile-dropdown-toggle');
+        
+        mobileDropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                const dropdownMenu = e.currentTarget.nextElementSibling;
+                const icon = e.currentTarget.querySelector('.fa-chevron-down');
+                
+                // Close other dropdowns
+                mobileDropdownToggles.forEach(otherToggle => {
+                    if (otherToggle !== toggle) {
+                        const otherMenu = otherToggle.nextElementSibling;
+                        const otherIcon = otherToggle.querySelector('.fa-chevron-down');
+                        otherMenu.classList.add('hidden');
+                        otherIcon.style.transform = 'rotate(0deg)';
+                    }
+                });
+
+                // Toggle current dropdown
+                dropdownMenu.classList.toggle('hidden');
+                if (dropdownMenu.classList.contains('hidden')) {
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // Close mobile menu when window is resized to desktop view
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) { // lg breakpoint
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    </script>
 
     @stack('scripts')
 
